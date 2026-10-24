@@ -1,0 +1,21 @@
+# بيانات حقيقية
+*.xlsx
+*.xls
+*.csv
+!data/sample/*.csv
+
+# ملفات Power BI فيها داتا مخزنة
+*.pbix
+
+# SSIS
+*.user
+bin/
+obj/
+
+# ملفات النظام
+.DS_Store
+Thumbs.db
+# Visual Studio
+.vs/
+*.suo
+*.user
