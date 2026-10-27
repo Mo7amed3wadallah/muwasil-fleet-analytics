@@ -30,6 +30,8 @@ Design decisions:
 - **Unique constraints** on the natural keys (for example driver + month + year for diesel) so bad loads fail loudly instead of silently duplicating.
 - **Filtered unique index** on the residency number, so only non-empty values must be unique.
 
+   ![ERD](docs/erd.png)
+
 ## SSIS packages
 
 | Package | Purpose | Pattern |
@@ -42,6 +44,13 @@ Design decisions:
 | `Route_Stats_Package` | Monthly trips | Delete month, reload |
 | `Diesel_Package` | Monthly diesel | Delete month, reload |
 | `Driver_Adjustments_Package` | Fines and waiting pay | Append only |
+
+   Example: `Route_Stats_Package` deletes the month being reloaded, then loads it again, so reruns never duplicate rows.
+
+   ![SSIS Control Flow](docs/ssis_control_flow.png)
+   ![SSIS Data Flow](docs/ssis_data_flow.png)
+
+   Rows that fail a Lookup (unknown driver, route or client) are routed to a separate output instead of being silently dropped, then validated with `sql/03_validation_checks.sql`.
 
 ## Challenges and solutions
 
